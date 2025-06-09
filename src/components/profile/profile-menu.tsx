@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useUserStore } from '@/hooks/useUserStore';
 import { useArticleFormStore } from '@/hooks/useArticleFormStore';
 import { useHeadingStore } from '@/hooks/useHeadingStore';
+import { useRouter } from 'next/navigation';
 
 const ProfileMenu = () => {
     const { clearUser } = useUserStore()
@@ -14,13 +15,14 @@ const ProfileMenu = () => {
     const { clearPosts } = usePostStore()
     const { setHeading } = useHeadingStore()
     const { setPosts } = usePostStore()
+    const router = useRouter()
     const handleLogout = async () => {
         await fetch('/api/logout');
         clearUser()
         clearArticleData()
         clearPosts()
         //setHeading('Latest Articles')
-        window.location.href = '/login';
+        router.push('/login');
     }
 
     const handleMyArticle = async () => {

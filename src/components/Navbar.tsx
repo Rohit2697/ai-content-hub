@@ -19,6 +19,7 @@ export default function Navbar() {
       const res = await fetch('/api/user/me')
       if (res.status == 401 || !res.ok) {
         router.push('/login')
+        return
       }
       const data = await res.json()
       const updateUser = {
@@ -30,7 +31,9 @@ export default function Navbar() {
     }
     fetchUser()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user])
+  }, [user, router])
+
+  if (!user) return null
   return (
     <nav className="w-full flex items-center justify-between px-8 py-5 bg-white shadow-md border-b border-violet-200">
       <Link href={'/'}>
