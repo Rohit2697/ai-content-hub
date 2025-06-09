@@ -7,8 +7,11 @@ import { Spinner } from './ui/spinner';
 import SummarizerModal from './SummerizeModel';
 import ErrorAlert from './ErrorAlert';
 import { useUserStore } from '@/hooks/useUserStore';
-import { useRouter } from 'next/navigation';
+
 import { Button } from './ui/button';
+import { useArticleFormStore } from '@/hooks/useArticleFormStore';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 type ArticleClientProps = {
   id: string;
@@ -21,13 +24,12 @@ export default function ArticleClient({ id }: ArticleClientProps) {
   const [tags, setTags] = useState<string[]>([]);
   const [summarizingError, setSummarizingError] = useState('')
   const [isOwner, setIsowner] = useState(false)
+  const [deleteError, setDeleteError] = useState('')
+  const [deleting, setDeleting] = useState(false)
   const { user } = useUserStore()
   const router = useRouter()
+  const { articleData, setArticleData, clearArticleData } = useArticleFormStore()
   useEffect(() => {
-
-    if (!user) {
-      return router.push('/login')
-    }
     const fetchArticle = async () => {
       const res = await fetch(`/api/article/${id}`);
       if (!res.ok) {
@@ -35,6 +37,7 @@ export default function ArticleClient({ id }: ArticleClientProps) {
       }
       const post: { article: Article } = await res.json();
       setArticle(post.article);
+
       let ImageURL = ""
       if (post.article.coverImage) {
         const byteArray = new Uint8Array(post.article.coverImage); // from number[]
@@ -42,15 +45,51 @@ export default function ArticleClient({ id }: ArticleClientProps) {
         const urlCreator = window.URL || window.webkitURL;
         ImageURL = urlCreator.createObjectURL(blob);
       }
+      const updateArticleData = {
+        ...articleData,
+        title: post.article.title,
+        description: post.article.description,
+        content: post.article.content,
+        tags: post.article.tags.join(','),
+        imageUrl: ImageURL
 
-      setIsowner(post.article.createdBy === user.user_id)
+      }
+      setArticleData(updateArticleData)
+      setIsowner(post.article.createdBy === user?.user_id)
       setImageURL(ImageURL);
       setTags(post.article.tags ? post.article.tags : []);
+
     };
     fetchArticle();
     return () => URL.revokeObjectURL(imageUrl);
-  }, [id]);
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, user]);
+  const handlearticleDelete = async () => {
+    try {
+      setDeleteError('')
+      if (!article) return
+      setDeleting(true)
+      const res = await fetch(`/api/article/${article.id}`, {
+        method: "DELETE"
+      })
+      setDeleting(false)
+      if (res.status == 401) {
+        router.push('/login')
+        return;
+      }
+      if (!res.ok) {
+        const data = await res.json()
+        setDeleteError(data.message || 'Unable to delete')
+        return
+      }
+      clearArticleData()
+      router.push('/')
+      return
+    } catch {
+      setDeleting(false)
+      setDeleteError('Something went wrong')
+    }
+  }
   if (!article)
     return (
       <Spinner size="large" className="text-violet-600" />
@@ -59,6 +98,7 @@ export default function ArticleClient({ id }: ArticleClientProps) {
 
   return (
     <main className="max-w-4xl mx-auto px-6 py-12 bg-gradient-to-b from-violet-50 to-white rounded-lg shadow-lg">
+      {deleteError && <ErrorAlert message={deleteError} setError={setDeleteError} />}
       {summarizingError && <ErrorAlert message={summarizingError} setError={setSummarizingError} />}
       <h1 className="text-4xl font-extrabold mb-6 text-violet-700 border-b-4 border-violet-300 pb-3">
         {article.title}
@@ -83,8 +123,18 @@ export default function ArticleClient({ id }: ArticleClientProps) {
         ))}
       </div>
       <div className="flex justify-end mb-6 gap-2">
-        {isOwner && <Button variant="default" className='bg-red-600 text-white px-4 py-2 rounded-md shadow hover:bg-red-700 transition'>Delete</Button>}
-        {isOwner && <Button variant="default" className='bg-violet-600 text-white px-4 py-2 rounded-md shadow hover:bg-violet-700 transition'>Edit</Button>}
+        {isOwner && <Button variant="default" className='bg-red-600 text-white px-4 py-2 rounded-md shadow hover:bg-red-700 transition' onClick={handlearticleDelete} >
+
+          {deleting ? (
+            <div className="flex items-center gap-2">
+              <Spinner size="small" /> Deleting...
+            </div>
+          ) : (
+            'Delete'
+          )}
+
+        </Button>}
+        {isOwner && <Link href={`/articles/edit/${article.id}`}><Button variant="default" className='bg-violet-600 text-white px-4 py-2 rounded-md shadow hover:bg-violet-700 transition'>Edit</Button></Link>}
 
         <SummarizerModal article_id={id} content={article.content} setError={setSummarizingError} />
       </div>

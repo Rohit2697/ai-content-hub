@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   const formData = await req.formData();
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
-  
+
   if (!email || !password) return errorResponseObject("Missing fields", 400);
 
   const user = await db.user.findUnique({
@@ -41,6 +41,8 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({
     message: "logged in successfully!",
     userId: user.id,
+    name: user.name,
+    email: user.email,
     token,
     status: 200,
   });

@@ -3,14 +3,15 @@ import React, { useEffect, useState } from 'react';
 import { Input } from './ui/input';
 //import { useDebounce } from '@/hooks/useDebounce';
 import { usePostStore } from '@/hooks/usePostStore';
-//import { useHeadingStore } from '@/hooks/useHeadingStore';
+import { useHeadingStore } from '@/hooks/useHeadingStore';
 const SearchBox = () => {
     const [searchValue, setSearchValue] = useState('')
     const [debounceValue, setDebounceValue] = useState('')
-    //const { setHeading } = useHeadingStore()
+
+    const { clearHeading, setHeading } = useHeadingStore()
     const { setPosts } = usePostStore()
     useEffect(() => {
-        console.log(searchValue);
+     
         const timer = setTimeout(() => {
             setDebounceValue(searchValue)
         }, 500)
@@ -18,6 +19,18 @@ const SearchBox = () => {
         return () => clearTimeout(timer)
     }, [searchValue, setPosts])
 
+    const onSearchBoxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+        if (!e.target.value) {
+            clearHeading()
+        }
+        else {
+            setHeading('Search Results')
+        }
+
+        setSearchValue(e.target.value)
+
+    }
     useEffect(() => {
 
         const searchArticles = async (value: string) => {
@@ -50,10 +63,7 @@ const SearchBox = () => {
                 type="text"
                 value={searchValue}
                 placeholder="Search articles..."
-                onChange={(e) => {
-                  //  setHeading('Search Results')
-                    setSearchValue(e.target.value)
-                }}
+                onChange={onSearchBoxChange}
                 className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
             />
             <svg

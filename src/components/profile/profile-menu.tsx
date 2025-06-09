@@ -6,13 +6,13 @@ import { usePostStore } from '@/hooks/usePostStore';
 import Link from 'next/link';
 import { useUserStore } from '@/hooks/useUserStore';
 import { useArticleFormStore } from '@/hooks/useArticleFormStore';
-//import { useHeadingStore } from '@/hooks/useHeadingStore';
+import { useHeadingStore } from '@/hooks/useHeadingStore';
 
 const ProfileMenu = () => {
     const { clearUser } = useUserStore()
     const { clearArticleData } = useArticleFormStore()
     const { clearPosts } = usePostStore()
-    //const { setHeading } = useHeadingStore()
+    const { setHeading } = useHeadingStore()
     const { setPosts } = usePostStore()
     const handleLogout = async () => {
         await fetch('/api/logout');
@@ -24,7 +24,7 @@ const ProfileMenu = () => {
     }
 
     const handleMyArticle = async () => {
-        //setHeading('My Articles')
+        setHeading('My Articles')
         try {
             const res = await fetch('/api/user/articles')
             if (!res.ok) return setPosts([])

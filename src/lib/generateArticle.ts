@@ -11,7 +11,7 @@ export const generateArticleFromPrompt = async (
   apiKey: string,
   model: string
 ) => {
-  console.log("Article Generation Started");
+
   const chain = new ConversationChain({
     llm: generateLLM(apiKey, model),
     memory: getUserMemory(userId),
@@ -22,7 +22,7 @@ export const generateArticleFromPrompt = async (
       input: `${Systemprompt}\nUser prompt: ${prompt}`,
     });
 
-    // console.log("chain values", response);
+    
     return parseArticleResponse(response);
   } catch (err) {
     console.error("Error during generateArticleFromPrompt:", err);

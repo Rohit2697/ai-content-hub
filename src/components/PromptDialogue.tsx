@@ -35,7 +35,7 @@ const PromptDialogue = ({ editorInstace, setShowDialog, showDialog }: PromptDial
     }
     const handleArticleGeneration = async () => {
         if (!prompt) return setError('Prompt can not be empty!')
-        console.log('Prompt:', prompt);
+ 
         setIsGenerating(true)
         setError('')
         try {

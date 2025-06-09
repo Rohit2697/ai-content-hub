@@ -9,5 +9,5 @@ interface HeadigStoreProps {
 export const useHeadingStore = create<HeadigStoreProps>((set) => ({
   heading: "Latest Articles",
   setHeading: (heading) => set({ heading }),
-  clearHeading: () => set({ heading: "" }),
+  clearHeading: () => set({ heading: "Latest Articles" }),
 }));

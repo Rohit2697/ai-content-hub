@@ -9,17 +9,12 @@ import type { Editor } from '@tiptap/react';
 import ArticleForm from './ArticleForm';
 import { useRouter } from 'next/navigation';
 export default function PostArticleForm() {
-  const [redirectTime, setRedirectTime] = useState(5);
-  const [successAlert, setSuccessAlert] = useState(false);
-
-
-
+  const [redirectTime, setRedirectTime] = useState(3);
+  const [successAlert, setSuccessAlert] = useState('');
   const [initializing, setInitializing] = useState(true)
   const [errorMessage, setErrorMessage] = useState('');
-
   const [loading, setLoading] = useState(false)
   const [showDialog, setShowDialog] = useState(false);
-
   const [editorInstace, setEditorInstace] = useState<Editor | null>(null)
   const router = useRouter()
   useEffect(() => {
@@ -34,6 +29,54 @@ export default function PostArticleForm() {
 
 
 
+  const postArticle = async ({ title, description, content, coverimage, tags }:
+    { title: string, content: string, description: string, tags: string, coverimage: File | null }
+  ) => {
+    setLoading(true)
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (!title || !content || !description) {
+      setLoading(false)
+      setErrorMessage('Required Fields are Missing');
+
+      return;
+    }
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('description', description);
+    formData.append('file', coverimage || '');
+    formData.append('tags', tags);
+    formData.append('slug', title.toLocaleLowerCase().split(' ').join('-'));
+    try {
+      const res = await fetch('/api/article', {
+        method: 'POST',
+        body: formData,
+      });
+      setLoading(false)
+      if (res.status == 401) {
+        router.push('/login')
+        return
+      }
+      if (!res.ok) {
+        const data = await res.json()
+        setErrorMessage(data.message || 'Unable to Save Article')
+      }
+      setSuccessAlert('Article saved successfully!');
+      const countdownInterval = setInterval(() => {
+        setRedirectTime((prev) => {
+          if (prev <= 1) {
+            clearInterval(countdownInterval);
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } catch {
+      setLoading(false)
+      setErrorMessage('Something went wrong');
+    }
+
+  };
+
   if (initializing) {
     return (<div className="min-h-screen flex items-center justify-center bg-white">
       <Spinner size="large" className="text-violet-600" />
@@ -44,7 +87,7 @@ export default function PostArticleForm() {
       {loading && <div className="absolute inset-0 z-10 flex items-center justify-center  bg-opacity-60 rounded-xl">
         <Spinner size="large" className="text-violet-600" />
       </div>}
-      {successAlert && <SaveArticleAlert redirectTime={redirectTime} />}
+      {successAlert && <SaveArticleAlert redirectTime={redirectTime} message={successAlert} />}
       {errorMessage && <ErrorAlert message={errorMessage} setError={setErrorMessage} />}
       <div className="mb-6">
         <Button
@@ -60,11 +103,9 @@ export default function PostArticleForm() {
       </div>
       <ArticleForm
         loading={loading}
-        setEditorInstace={setEditorInstace}
-        setErrorMessage={setErrorMessage}
-        setLoading={setLoading}
-        setRedirectTime={setRedirectTime}
-        setSuccessAlert={setSuccessAlert} />
+        articleAction={postArticle}
+        articleVariant='Save'
+        setEditorInstace={setEditorInstace} />
     </div>
   );
 }

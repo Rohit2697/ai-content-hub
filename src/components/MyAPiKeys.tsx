@@ -73,6 +73,7 @@ export default function MyAPIKeys() {
     }
     useEffect(() => {
         fetchApikeys()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     if (loading) {
         return (
@@ -91,7 +92,7 @@ export default function MyAPIKeys() {
                 My API Key
             </h1>
             {!apikeyObj?.open_ai_token && <div className='my-2 flex justify-center'>
-                <AImodelDialogue fetchApiKeys={fetchApikeys}/>
+                <AImodelDialogue fetchApiKeys={fetchApikeys} />
             </div>}
             {apikeyObj?.open_ai_token && apikeyObj.model && <div className={cn("space-y-4", deleting ? "opacity-50 pointer-events-none" : "opacity-100")}>
 

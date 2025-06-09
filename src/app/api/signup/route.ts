@@ -48,7 +48,9 @@ export async function POST(req: NextRequest) {
     {
       message: "User created",
       userId: user.id,
-      token
+      name: user.name,
+      email: user.email,
+      token,
     },
     { status: 201 }
   );

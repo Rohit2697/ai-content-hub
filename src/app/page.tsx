@@ -1,6 +1,7 @@
 
 //import NoArtilce from '@/components/NoArtilce';
 
+import Heading from '@/components/Heading';
 import ShowArticles from '@/components/ShowArticles';
 import { db } from '@/db';
 
@@ -18,9 +19,7 @@ export default async function Home() {
 
   return (
     <>
-      <h1 className="text-4xl font-extrabold mb-10 text-violet-700 border-b-4 border-violet-300 pb-2">
-        Latest Articles
-      </h1>
+      <Heading />
       <ShowArticles articles={newArticles} />
     </>
 

@@ -11,7 +11,7 @@ export default function ArticleCard({
   author,
   date,
 }: ArticleCardProps) {
-  console.log("ttile: ", title, "tags: ", tags);
+
   return (
     <Link href={`/articles/${id}`}>
       <div className="w-full h-[300px] border border-violet-300 rounded-lg p-5 shadow-sm hover:shadow-lg transition-shadow duration-300 cursor-pointer bg-white hover:bg-violet-50 flex flex-col justify-between">

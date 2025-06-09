@@ -13,6 +13,7 @@ const ShowArticles = ({ articles }: { articles: Article[] }) => {
     const { clearArticleData } = useArticleFormStore()
     const [loading, setLoading] = useState(true)
     //const { heading } = useHeadingStore()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => clearArticleData(), [])
     useEffect(() => {
         if (articles.length) {
@@ -25,7 +26,7 @@ const ShowArticles = ({ articles }: { articles: Article[] }) => {
     if (!posts.length) {
         return <NoArtilce />
     }
-    console.log("article: ", articles);
+
     return (
         <>
 

@@ -10,29 +10,32 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import TiptapEditor from "./TiptapEditor";
 import { Button } from "./ui/button";
-import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-
+interface ArticleFormActionParams {
+    title: string;
+    content: string;
+    description: string;
+    tags: string;
+    coverimage: File | null;
+}
 interface ArticleFormProps {
-    setRedirectTime: Dispatch<SetStateAction<number>>;
-    setSuccessAlert: Dispatch<SetStateAction<boolean>>;
-    setErrorMessage: Dispatch<SetStateAction<string>>;
+    articleAction: (formData: ArticleFormActionParams) => Promise<void>;
+    articleVariant: string;
     setEditorInstace: Dispatch<SetStateAction<Editor | null>>
-    setLoading: Dispatch<SetStateAction<boolean>>
     loading: boolean
 }
-export default function ArticleForm({ loading, setLoading, setSuccessAlert, setErrorMessage, setEditorInstace, setRedirectTime }: ArticleFormProps) {
+export default function ArticleForm({ loading, setEditorInstace, articleAction, articleVariant }: ArticleFormProps) {
     const { articleData, setArticleData } = useArticleFormStore()
     const [preview, setPreview] = useState(false)
 
-    const router = useRouter()
+
     const onChangeContent = (post: string) => {
         setArticleData({ ...articleData, content: post })
     };
     const handleEditorReady = useCallback((editor: Editor) => {
         setEditorInstace(editor)
-    }, [])
+    }, [setEditorInstace])
 
     const onChangeImageLink = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files?.[0]) {
@@ -54,55 +57,11 @@ export default function ArticleForm({ loading, setLoading, setSuccessAlert, setE
     };
 
     const onPreviewClick = () => {
-        // setPreviewProps({ title, slug, description, content, tags, coverImage: imageUrl, setPreview });
         setPreview(true);
     };
 
-    const postArticle = async () => {
-        setLoading(true)
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        if (!articleData.title || !articleData.content || !articleData.description) {
-            setLoading(false)
-            setErrorMessage('Required Fields are Missing');
 
-            return;
-        }
-        const formData = new FormData();
-        formData.append('title', articleData.title);
-        formData.append('content', articleData.content);
-        formData.append('description', articleData.description);
-        formData.append('file', articleData.coverimage || '');
-        formData.append('tags', articleData.tags);
-        formData.append('slug', articleData.title.toLocaleLowerCase().split(' ').join('-'));
-        try {
-            const res = await fetch('/api/article', {
-                method: 'POST',
-                body: formData,
-            });
-            setLoading(false)
-            if (res.status == 401) {
-                router.push('/login')
-                return
-            }
-            if (!res.ok) {
-                const data = await res.json()
-                setErrorMessage(data.message || 'Unable to Save Article')
-            }
-            setSuccessAlert(true);
-            const countdownInterval = setInterval(() => {
-                setRedirectTime((prev) => {
-                    if (prev <= 1) {
-                        clearInterval(countdownInterval);
-                    }
-                    return prev - 1;
-                });
-            }, 1000);
-        } catch {
-            setLoading(false)
-            setErrorMessage('Something went wrong');
-        }
 
-    };
 
     if (preview) {
         return <PreviewArticle setPreview={setPreview} />
@@ -182,8 +141,8 @@ export default function ArticleForm({ loading, setLoading, setSuccessAlert, setE
             <Button onClick={onPreviewClick} className="bg-violet-600 hover:bg-violet-700 text-white rounded px-6 py-2 shadow" variant="default">
                 Preview
             </Button>
-            <Button onClick={postArticle} className="bg-violet-600 hover:bg-violet-700 text-white rounded px-6 py-2 shadow" variant="default">
-                Submit
+            <Button onClick={() => articleAction({ ...articleData })} className="bg-violet-600 hover:bg-violet-700 text-white rounded px-6 py-2 shadow" variant="default">
+                {articleVariant}
             </Button>
         </div>
     </div>)

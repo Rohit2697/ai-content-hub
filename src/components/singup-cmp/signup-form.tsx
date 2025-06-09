@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Spinner } from '../ui/spinner';
 import { cn } from '@/lib/utils';
+import { useUserStore } from '@/hooks/useUserStore';
 
 export default function SignupForm() {
     const router = useRouter()
@@ -26,7 +27,7 @@ export default function SignupForm() {
     const [passwordError, setPasswordError] = useState('');
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
-
+    const { setUser } = useUserStore()
     const isFormValid = !passwordError && name && email && password && confirmPassword;
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -50,7 +51,14 @@ export default function SignupForm() {
 
                 return;
             }
+            const data = await res.json()
 
+                    const updateUser = {
+                email: data.email,
+                user_id: data.userId,
+                name: data.name
+            }
+            setUser(updateUser)
             setLoading(false)
             router.push('/')
         } catch {
