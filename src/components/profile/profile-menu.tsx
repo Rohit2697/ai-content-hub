@@ -34,7 +34,7 @@ const ProfileMenu = () => {
         } catch {
             setPosts([])
         }
-
+        router.push('/')
     }
     return (
         <DropdownMenuContent
