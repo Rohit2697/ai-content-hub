@@ -86,6 +86,9 @@ Prisma.NullTypes = {
  * Enums
  */
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -118,6 +121,11 @@ exports.Prisma.UserScalarFieldEnum = {
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
 };
 
 exports.Prisma.NullsOrder = {
@@ -168,7 +176,7 @@ const config = {
   "datasourceNames": [
     "db"
   ],
-  "activeProvider": "sqlite",
+  "activeProvider": "postgresql",
   "inlineDatasources": {
     "db": {
       "url": {
@@ -177,8 +185,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Post {\n  id          String  @id @default(uuid())\n  slug        String\n  title       String\n  description String\n  content     String\n  tags        String?\n  author      String\n  date        String\n  readingTime String\n  coverImage  Bytes?\n  summery     String?\n  createdBy   String\n  user        User    @relation(\"UserPosts\", fields: [createdBy], references: [id])\n}\n\nmodel User {\n  id             String    @id @default(uuid()) // changed from Int to String with UUID\n  name           String\n  email          String    @unique\n  password       String\n  token          String?\n  tokenExpiresAt DateTime?\n  open_ai_token  String?\n  model          String?\n  posts          Post[]    @relation(\"UserPosts\")\n}\n",
-  "inlineSchemaHash": "494a5f213f57879607cc41ea835e196dfa3846f26aa76a52380ad3a5012c1c81",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Post {\n  id          String  @id @default(uuid())\n  slug        String\n  title       String\n  description String\n  content     String\n  tags        String?\n  author      String\n  date        String\n  readingTime String\n  coverImage  Bytes?\n  summery     String?\n  createdBy   String\n  user        User    @relation(\"UserPosts\", fields: [createdBy], references: [id])\n}\n\nmodel User {\n  id             String    @id @default(uuid()) // changed from Int to String with UUID\n  name           String\n  email          String    @unique\n  password       String\n  token          String?\n  tokenExpiresAt DateTime?\n  open_ai_token  String?\n  model          String?\n  posts          Post[]    @relation(\"UserPosts\")\n}\n",
+  "inlineSchemaHash": "87a025334bb7f3f71c91d1bb886d8f13778ad45d92a763233956fe0929416338",
   "copyEngine": true
 }
 config.dirname = '/'
