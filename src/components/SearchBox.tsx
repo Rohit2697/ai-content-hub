@@ -44,7 +44,6 @@ const SearchBox = () => {
                 if (!value)
                     searchString = api;
                 else searchString += api + searchQuery + encodeURIComponent(value)
-                console.log("calling from search");
                 const res = await fetch(searchString)
                 if (!res.ok) {
                     return setPosts([])

@@ -22,7 +22,7 @@ const ProfileMenu = () => {
         clearArticleData()
         clearPosts()
         //setHeading('Latest Articles')
-         router.push('/login');
+        router.push('/login');
     }
 
     const handleMyArticle = async () => {

@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from './ui/button';
 import Profile from './profile/profile';
@@ -13,14 +13,12 @@ export default function Navbar() {
   const { user, setUser } = useUserStore()
   const { clearHeading } = useHeadingStore()
   const router = useRouter()
-  const [currentPath,setCurrentPath]=useState('')
-  const notAllowedPath = ['/login', '/signup']
 
-  useEffect(()=>{
-    if(typeof window !=='undefined')setCurrentPath(window.location.pathname)
-  },[])
+  // const notAllowedPath = ['/login', '/signup']
+
+
   useEffect(() => {
-
+ 
     if (user) return
     const fetchUser = async () => {
       const res = await fetch('/api/user/me')
@@ -40,9 +38,6 @@ export default function Navbar() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, router])
 
-  if (notAllowedPath.includes(currentPath)) {
-    return null
-  }
   if (!user) return null
   return (
     <nav className="w-full flex items-center justify-between px-8 py-5 bg-white shadow-md border-b border-violet-200">
