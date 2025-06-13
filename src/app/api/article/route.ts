@@ -1,12 +1,7 @@
 import { db } from "@/db";
 import { NextRequest, NextResponse } from "next/server";
 //import { CreateArticleRequest } from '@/app/articles/article-type';
-import {
-  
-  errorResponseObject,
-  getUser_from_token,
-  readTime,
-} from "@/lib/utils";
+import { errorResponseObject, getUser_from_token, readTime } from "@/lib/utils";
 import sharp from "sharp";
 import { resetMemory } from "@/lib/memory";
 
@@ -26,30 +21,7 @@ export async function GET(req: NextRequest, context: UserArtlcesParams) {
 
   const { searchParams } = new URL(req.url);
   const search = searchParams.get("search")?.toLocaleLowerCase() || "";
-  if (search) {
-    const searchedArticles = await db.post.findMany({
-      where: {
-        OR: [
-          {
-            title: { contains: search },
-            description: { contains: search },
-            content: { contains: search },
-          },
-        ],
-      },
-      orderBy: {
-        date: "desc",
-      },
-    });
-    return NextResponse.json(
-      searchedArticles.map((article) => {
-        return {
-          ...article,
-          tags: article.tags ? JSON.parse(article.tags) : "",
-        };
-      })
-    );
-  }
+
   if (params && params.userId) {
     const userArticles = await db.post.findMany({
       where: {
@@ -69,16 +41,31 @@ export async function GET(req: NextRequest, context: UserArtlcesParams) {
         };
       })
     );
+  } else {
+    const searchedArticles = await db.post.findMany({
+      where: search
+        ? {
+            OR: [
+              { title: { contains: search, mode: "insensitive" } },
+              { content: { contains: search, mode: "insensitive" } },
+              { description: { contains: search, mode: "insensitive" } },
+            ],
+          }
+        : {},
+      orderBy: {
+        date: "desc",
+      },
+    });
+
+    return NextResponse.json(
+      searchedArticles.map((article) => {
+        return {
+          ...article,
+          tags: article.tags ? JSON.parse(article.tags) : "",
+        };
+      })
+    );
   }
-  const posts = await db.post.findMany({
-    orderBy: {
-      date: "desc",
-    },
-  });
-  const sendPosts = posts.map((post) => {
-    return { ...post, tags: post.tags ? JSON.parse(post.tags) : "" };
-  });
-  return NextResponse.json(sendPosts);
 }
 
 export async function POST(req: NextRequest) {

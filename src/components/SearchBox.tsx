@@ -1,17 +1,19 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Input } from './ui/input';
 //import { useDebounce } from '@/hooks/useDebounce';
 import { usePostStore } from '@/hooks/usePostStore';
 import { useHeadingStore } from '@/hooks/useHeadingStore';
 const SearchBox = () => {
+
+    const hasTyped = useRef(false)
     const [searchValue, setSearchValue] = useState('')
     const [debounceValue, setDebounceValue] = useState('')
 
     const { clearHeading, setHeading } = useHeadingStore()
     const { setPosts } = usePostStore()
     useEffect(() => {
-     
+
         const timer = setTimeout(() => {
             setDebounceValue(searchValue)
         }, 500)
@@ -27,12 +29,12 @@ const SearchBox = () => {
         else {
             setHeading('Search Results')
         }
-
+        hasTyped.current = true
         setSearchValue(e.target.value)
 
     }
     useEffect(() => {
-
+        if (!hasTyped.current) return
         const searchArticles = async (value: string) => {
             const api = `/api/article`
             const searchQuery = '?search='
@@ -41,8 +43,8 @@ const SearchBox = () => {
             try {
                 if (!value)
                     searchString = api;
-                else searchString += api + searchQuery + value
-
+                else searchString += api + searchQuery + encodeURIComponent(value)
+                console.log("calling from search");
                 const res = await fetch(searchString)
                 if (!res.ok) {
                     return setPosts([])
@@ -61,6 +63,7 @@ const SearchBox = () => {
         <div className="relative w-full max-w-xs md:max-w-md">
             <Input
                 type="text"
+
                 value={searchValue}
                 placeholder="Search articles..."
                 onChange={onSearchBoxChange}

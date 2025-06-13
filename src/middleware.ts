@@ -23,7 +23,6 @@ export function middleware(req: NextRequest) {
 
   // If authenticated and trying to access login/signup
   if (token && isAuthRoute) {
-    
     return NextResponse.redirect(new URL("/", req.url));
   }
 
