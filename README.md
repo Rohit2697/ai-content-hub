@@ -1,157 +1,116 @@
-integrate with Prisma client 
-1. npm install prisma
-2. npx prisma init --datasource-provider sqlite
-3. define model
-ex: prisma\schema.prisma
-model Post {
-  id          Int    @id @default(autoincrement())
-  slug        String
-  title       String
-  description String
-  content     String
-  tags        String
-  author      String
-  date        String
-  readingTime String
-  coverImage  String
-}
 
-4. npx prisma migrate dev
+# 🧠 AI-Powered Knowledge Hub
 
-✅ Goal Recap
-Let the user:
+An AI-enhanced content publishing platform where users can create, preview, and publish articles — with features like AI-powered generation, summarization, and Q&A. Built with **Next.js App Router**, **Langchain**, and **OpenAI API**.
 
-Enter a prompt (e.g., “Write an article on AI in healthcare”)
+## 🚀 Live Demo
+🔗 [ai-content-hub.vercel.app](https://ai-content-hub-ruddy.vercel.app/)
 
-Generate: title, tags, description, and content
+## ✨ Features
 
-Support follow-up prompts (e.g., “Make it longer” or “Add references”)
+- 📝 **Article Creation** with a rich-text Tiptap editor
+- 🤖 **AI Article Generation** using OpenAI (via Langchain)
+- 📄 **Article Summarization** and **Q&A**
+- 📸 Cover Image Upload & Preview
+- 🔍 Real-time Search
+- 🧠 Prompt memory for iterative AI interaction
+- 🧾 Auto-generated Slugs
+- 📱 Fully Responsive Design (Violet Theme)
+- 👤 Profile Avatar with dropdown/logout
 
-Use Ollama (Mistral) and Langchain with memory
+## 🧰 Tech Stack
 
-🔧 Step-by-Step Plan
-1. Setup LangChain with Ollama (Mistral)
-Install dependencies:
+| Layer         | Tech                                     |
+|---------------|------------------------------------------|
+| Frontend      | Next.js (App Router), Tailwind CSS, Tiptap, TypeScript |
+| State         | Zustand                                  |
+| Backend/API   | Next.js API Routes, Prisma ORM, SQLite   |
+| AI Integration| Langchain + OpenAI API                   |
 
-bash
-Copy
-Edit
-npm install langchain @langchain/community
-Use ChatOllama:
+## 📦 Setup Instructions
 
-ts
-Copy
-Edit
-import { ChatOllama } from '@langchain/community/chat_models/ollama';
+### 1. Clone the Repository
 
-const llm = new ChatOllama({
-  baseUrl: 'http://localhost:11434',
-  model: 'mistral',
-});
-2. Add Memory Support
-Choose memory backend:
+```bash
+git clone https://github.com/Rohit2697/ai-content-hub.git
+cd ai-content-hub
+```
 
-✅ Best for persistence: SQLite via @langchain/community
+### 2. Install Dependencies
 
-For simplicity: In-memory store (BufferMemory)
+```bash
+npm install
+# or
+yarn install
+```
 
-For SQLite:
+### 3. Setup Environment Variables
 
-bash
-Copy
-Edit
-npm install sqlite3
-Use memory with LangChain:
+Create a `.env.local` file:
 
-ts
-Copy
-Edit
-import { ChatMessageHistory } from "langchain/stores/message/sqlite";
-import { BufferMemory } from "langchain/memory";
+```env
+OPENAI_API_KEY=your-openai-api-key
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+```
 
-const messageHistory = new ChatMessageHistory({
-  databasePath: './memory.db',
-  sessionId: 'user-session-id',
-});
+### 4. Setup the Database
 
-const memory = new BufferMemory({
-  chatHistory: messageHistory,
-  returnMessages: true,
-  memoryKey: 'chat_history',
-});
-3. Create LangChain Agent / Chain
-Use a simple prompt template:
+```bash
+npx prisma generate
+npx prisma migrate dev --name init
+```
 
-ts
-Copy
-Edit
-import { ConversationChain } from 'langchain/chains';
-import { PromptTemplate } from 'langchain/prompts';
+### 5. Run the Development Server
 
-const prompt = PromptTemplate.fromTemplate(`
-You are a helpful assistant for writing blog articles.
-User: {input}
-`);
+```bash
+npm run dev
+# or
+yarn dev
+```
 
-const chain = new ConversationChain({
-  llm,
-  memory,
-  prompt,
-});
-4. Call the Chain from PostArticle Page
-Create an endpoint (e.g., /api/generate-article) that receives prompt input and returns title, tags, etc.
+Visit [http://localhost:3000](http://localhost:3000) to start using the app.
 
-Example call:
+## 💡 Folder Structure
 
-ts
-Copy
-Edit
-const response = await chain.call({ input: "Write an article on AI in healthcare" });
-// Use response.text to parse or split into title, tags, etc.
-You can split the response using structured prompts or by asking the LLM:
+```
+app/                 # Next.js App Router pages
+components/          # UI and layout components
+lib/                 # Utility functions
+db/                  # Prisma schema and database access
+public/              # Static assets
+```
 
-“Return the response as a JSON with fields: title, description, tags, content.”
+## 🧠 AI Capabilities
 
-5. UI Integration (PostArticle Page)
-Textarea or input for prompt
+All AI features are powered by OpenAI via Langchain:
 
-A “Generate Article” button
+- **Generate Article**: Write an article from a simple prompt.
+- **Summarize**: Condense long articles into TL;DRs.
+- **Q&A**: Ask questions about article content.
 
-Show loading spinner
+Langchain memory allows **prompt history** and multi-turn conversations for AI refinement.
 
-Display the generated content in editable fields
+## 🔐 Authentication
 
-Optional enhancement:
+Currently the app uses a lightweight token-based auth system (with `token` cookie). In production, consider integrating with providers like NextAuth or Clerk.
 
-A chat-like UI for iterative prompts
+## 🛠 Planned Features
 
-📦 Bonus Tip: Use Output Parsers
-To structure LLM responses cleanly:
+- 🔐 OAuth-based authentication
+- 📬 Commenting system
+- 📈 Analytics dashboard
+- 🧾 Markdown export
 
-ts
-Copy
-Edit
-import { StructuredOutputParser } from "langchain/output_parsers";
+## 🤝 Contributing
 
-const parser = StructuredOutputParser.fromNamesAndDescriptions({
-  title: "The article title",
-  tags: "Relevant keywords",
-  description: "A short summary",
-  content: "The full article",
-});
+Contributions are welcome! Feel free to:
+- Fork the repo
+- Create a new branch
+- Submit a pull request
 
-const prompt = new PromptTemplate({
-  template: `Generate an article with this input: {input}. Return as JSON.\n{format_instructions}`,
-  inputVariables: ['input'],
-  partialVariables: {
-    format_instructions: parser.getFormatInstructions(),
-  }
-});
-Then parse the result:
 
-ts
-Copy
-Edit
-const result = await chain.call({ input: userPrompt });
-const parsed = await parser.parse(result.response);
-Would you like me to scaffold a working /api/generate-article endpoint with memory and parsing for you?
+## 🙋‍♂️ Author
+
+**Rohit Dey**  
+🔗 [LinkedIn](https://www.linkedin.com/in/rohit-dey-7564a0123/)  
+💻 [Portfolio](https://ai-content-hub-ruddy.vercel.app/)
