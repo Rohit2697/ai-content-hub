@@ -55,8 +55,11 @@ const LoginForm = () => {
             }
             setUser(updateUser)
             setLoading(false)
+            if (typeof window !== "undefined") {
+                window.location.reload()
+                return
+            }
             router.push('/')
-
 
         } catch {
             setLoading(false)
@@ -64,7 +67,7 @@ const LoginForm = () => {
         }
     }
     return (
-        <div className="min-h-screen flex items-center justify-center ">
+        <div className="flex items-center justify-center ">
             {loading && <div className="absolute inset-0 z-10 flex items-center justify-center  bg-opacity-60 rounded-xl">
                 <Spinner size="large" className="text-violet-600" />
             </div>}

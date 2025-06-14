@@ -29,6 +29,9 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+       
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Navbar />
         <div className="min-h-screen bg-gradient-to-b from-violet-50 to-white">

@@ -21,6 +21,10 @@ const ProfileMenu = () => {
         clearUser()
         clearArticleData()
         clearPosts()
+        if (typeof window !== "undefined") {
+            window.location.reload()
+            return
+        }
         //setHeading('Latest Articles')
         router.push('/login');
     }

@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button } from './ui/button';
 import Profile from './profile/profile';
@@ -12,13 +12,17 @@ import { useRouter } from 'next/navigation';
 export default function Navbar() {
   const { user, setUser } = useUserStore()
   const { clearHeading } = useHeadingStore()
+  const [initializing, setInitializing] = useState(false)
+
   const router = useRouter()
 
-  // const notAllowedPath = ['/login', '/signup']
-
+  const notAllowedPath = ['/login', '/signup']
 
   useEffect(() => {
- 
+    setInitializing(true)
+  }, [])
+  useEffect(() => {
+
     if (user) return
     const fetchUser = async () => {
       const res = await fetch('/api/user/me')
@@ -37,30 +41,45 @@ export default function Navbar() {
     fetchUser()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, router])
+  if (!initializing) return null
+  if (typeof window !== "undefined") {
+    if (notAllowedPath.includes(window.location.pathname)) {
+      return null
+    }
+  }
 
   if (!user) return null
   return (
-    <nav className="w-full flex items-center justify-between px-8 py-5 bg-white shadow-md border-b border-violet-200">
-      <Link href={'/'}>
-        <h1 className="text-2xl font-extrabold text-violet-700 hover:text-violet-900 cursor-pointer transition-colors duration-200"
-          onClick={clearHeading}
-        >
-          AI-Powered Knowledge Hub
-        </h1>
-      </Link>
-      <div className="flex items-center gap-8 text-violet-600 font-medium">
-        <SearchBox />
-
-        <Link href="/articles/new">
-          <Button
-            className="bg-violet-600 hover:bg-violet-700 text-white shadow-md"
-            variant="default"
+    <nav className="w-full px-4 py-4 bg-white shadow-md border-b border-violet-200">
+      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
+        <Link href="/">
+          <h1
+            className="text-2xl font-extrabold text-violet-700 hover:text-violet-900 transition-colors duration-200 cursor-pointer text-center sm:text-left"
+            onClick={clearHeading}
           >
-            Post Article
-          </Button>
+            AI-Powered Knowledge Hub
+          </h1>
         </Link>
-        {user && <Profile name={user.name} userId={user.user_id} />}
+
+        <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full sm:w-auto">
+          <div className="w-full sm:w-auto">
+            <SearchBox />
+          </div>
+
+          <Link href="/articles/new" className="w-full sm:w-auto">
+            <Button className="w-full sm:w-auto bg-violet-600 hover:bg-violet-700 text-white shadow-md">
+              Post Article
+            </Button>
+          </Link>
+
+          {user && (
+            <div className="w-full sm:w-auto">
+              <Profile name={user.name} userId={user.user_id} />
+            </div>
+          )}
+        </div>
       </div>
     </nav>
+
   );
 }

@@ -12,8 +12,10 @@ const ShowArticles = ({ articles }: { articles: Article[] }) => {
     const { posts, setPosts } = usePostStore()
     const { clearArticleData } = useArticleFormStore()
     const [loading, setLoading] = useState(true)
+    const [initializing, setInitializing] = useState(false)
     //const { heading } = useHeadingStore()
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => { setInitializing(true) }, [])
     useEffect(() => clearArticleData(), [])
     useEffect(() => {
         if (articles.length) {
@@ -21,6 +23,8 @@ const ShowArticles = ({ articles }: { articles: Article[] }) => {
         }
         setLoading(false)
     }, [articles, setPosts])
+
+    if (!initializing) return null
     if (loading) return <Spinner size="large" className='text-violet-600' />
 
     if (!posts.length) {
