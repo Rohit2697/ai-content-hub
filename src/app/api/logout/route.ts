@@ -2,12 +2,10 @@ import { NextResponse } from "next/server";
 
 // app/api/logout/route.ts
 export async function GET() {
-  const response = NextResponse.redirect(
-    new URL("/login", process.env.NEXT_PUBLIC_BASE_URL)
-  );
+  const response = NextResponse.json({ message: "Logged out" });
   response.cookies.set("token", "", {
-    maxAge: 0,
     path: "/",
+    maxAge: 0,
   });
   return response;
 }
