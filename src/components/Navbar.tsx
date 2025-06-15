@@ -7,11 +7,13 @@ import SearchBox from './SearchBox';
 import { useUserStore } from '@/hooks/useUserStore';
 import { useHeadingStore } from '@/hooks/useHeadingStore';
 import { useRouter } from 'next/navigation';
+import { usePostStore } from '@/hooks/usePostStore';
 
 
 export default function Navbar() {
   const { user, setUser } = useUserStore()
   const { clearHeading } = useHeadingStore()
+  const { clearPosts } = usePostStore()
   const [initializing, setInitializing] = useState(false)
 
   const router = useRouter()
@@ -67,7 +69,7 @@ export default function Navbar() {
           </div>
 
           <Link href="/articles/new" className="w-full sm:w-auto">
-            <Button className="w-full sm:w-auto bg-violet-600 hover:bg-violet-700 text-white shadow-md">
+            <Button className="w-full sm:w-auto bg-violet-600 hover:bg-violet-700 text-white shadow-md" onClick={clearPosts}>
               Post Article
             </Button>
           </Link>
