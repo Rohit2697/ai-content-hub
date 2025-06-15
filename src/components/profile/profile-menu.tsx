@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem } from '../ui/dropdown-menu';
 import { usePostStore } from '@/hooks/usePostStore';
 
@@ -15,13 +15,18 @@ const ProfileMenu = () => {
     const { clearPosts } = usePostStore()
     const { setHeading } = useHeadingStore()
     const { setPosts } = usePostStore()
+    const [initializing, setInitializing] = useState(false)
     const router = useRouter()
+    useEffect(() => {
+        setInitializing(true)
+    }, [])
     const handleLogout = async () => {
         await fetch('/api/logout');
         clearUser()
         clearArticleData()
         clearPosts()
         if (typeof window !== "undefined") {
+            console.log("Reloading after logout!");
             window.location.reload()
             return
         }
@@ -40,6 +45,8 @@ const ProfileMenu = () => {
         }
         router.push('/')
     }
+
+    if (!initializing) return null
     return (
         <DropdownMenuContent
             className="mt-2 w-44 sm:w-48 rounded-lg border border-gray-200 bg-white p-2 shadow-xl animate-in fade-in slide-in-from-top-2"
