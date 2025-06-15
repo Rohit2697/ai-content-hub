@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar';
+import { SpeedInsights } from '@vercel/speed-insights/next'
 export const dynamic = 'force-dynamic';
 
 const geistSans = Geist({
@@ -30,12 +31,12 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-       
+
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Navbar />
         <div className="min-h-screen bg-gradient-to-b from-violet-50 to-white">
-          <main className="max-w-5xl mx-auto py-12 px-4">{children}</main>
+          <main className="max-w-5xl mx-auto py-12 px-4">{children}<SpeedInsights /></main>
         </div>
       </body>
     </html>
