@@ -97,62 +97,84 @@ export default function ArticleClient({ id }: ArticleClientProps) {
     );
 
   return (
-    <main className="max-w-4xl mx-auto px-6 py-12 bg-gradient-to-b from-violet-50 to-white rounded-lg shadow-lg">
-      {deleteError && <ErrorAlert message={deleteError} setError={setDeleteError} />}
-      {summarizingError && <ErrorAlert message={summarizingError} setError={setSummarizingError} />}
-      <h1 className="text-4xl font-extrabold mb-6 text-violet-700 border-b-4 border-violet-300 pb-3">
-        {article.title}
-      </h1>
+  <main className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-12 bg-gradient-to-b from-violet-50 to-white rounded-lg shadow-lg">
+  {deleteError && <ErrorAlert message={deleteError} setError={setDeleteError} />}
+  {summarizingError && <ErrorAlert message={summarizingError} setError={setSummarizingError} />}
 
-      <div className="text-violet-600 text-sm mb-6 font-semibold flex flex-wrap gap-2">
-        <span>By {article.author}</span>
-        <span>·</span>
-        <span>{timestampToDateTimeString(parseInt(article.date))}</span>
-        <span>·</span>
-        <span>{article.readingTime}</span>
-      </div>
+  <h1 className="text-2xl sm:text-4xl font-extrabold mb-6 text-violet-700 border-b-4 border-violet-300 pb-3">
+    {article.title}
+  </h1>
 
-      <div className="flex flex-wrap gap-3 mb-8">
-        {tags.map((tag) => (
-          <span
-            key={tag}
-            className="bg-violet-100 text-violet-700 px-3 py-1 rounded-full text-sm font-medium"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
-      <div className="flex justify-end mb-6 gap-2">
-        {isOwner && <Button variant="default" className='bg-red-600 text-white px-4 py-2 rounded-md shadow hover:bg-red-700 transition' onClick={handlearticleDelete} >
+  <div className="text-violet-600 text-xs sm:text-sm mb-6 font-semibold flex flex-wrap gap-2">
+    <span>By {article.author}</span>
+    <span>·</span>
+    <span>{timestampToDateTimeString(parseInt(article.date))}</span>
+    <span>·</span>
+    <span>{article.readingTime}</span>
+  </div>
 
-          {deleting ? (
-            <div className="flex items-center gap-2">
-              <Spinner size="small" /> Deleting...
-            </div>
-          ) : (
-            'Delete'
-          )}
+  <div className="flex flex-wrap gap-2 sm:gap-3 mb-6">
+    {tags.map((tag) => (
+      <span
+        key={tag}
+        className="bg-violet-100 text-violet-700 px-3 py-1 rounded-full text-xs sm:text-sm font-medium"
+      >
+        {tag}
+      </span>
+    ))}
+  </div>
 
-        </Button>}
-        {isOwner && <Link href={`/articles/edit/${article.id}`}><Button variant="default" className='bg-violet-600 text-white px-4 py-2 rounded-md shadow hover:bg-violet-700 transition'>Edit</Button></Link>}
+  <div className="flex flex-col sm:flex-row justify-end gap-2 mb-6">
+    {isOwner && (
+      <Button
+        variant="default"
+        className="bg-red-600 text-white px-4 py-2 rounded-md shadow hover:bg-red-700 transition w-full sm:w-auto"
+        onClick={handlearticleDelete}
+      >
+        {deleting ? (
+          <div className="flex items-center gap-2">
+            <Spinner size="small" /> Deleting...
+          </div>
+        ) : (
+          'Delete'
+        )}
+      </Button>
+    )}
 
-        <SummarizerModal article_id={id} content={article.content} setError={setSummarizingError} />
-      </div>
-      {article.coverImage && (
-        <Image
-          src={imageUrl}
-          alt={article.slug}
-          className="w-full rounded-lg mb-6 border border-violet-100 shadow"
-          width={800}
-          height={400}
-        />
-      )}
+    {isOwner && (
+      <Link href={`/articles/edit/${article.id}`} className="w-full sm:w-auto">
+        <Button
+          variant="default"
+          className="bg-violet-600 text-white px-4 py-2 rounded-md shadow hover:bg-violet-700 transition w-full sm:w-auto"
+        >
+          Edit
+        </Button>
+      </Link>
+    )}
 
-      <p className="text-lg text-gray-700 mb-6 bg-violet-50 p-4 rounded border-l-4 border-violet-400 shadow-sm">{article.description}</p>
+    <div className="w-full sm:w-auto">
+      <SummarizerModal article_id={id} content={article.content} setError={setSummarizingError} />
+    </div>
+  </div>
 
-      <article className="prose prose-lg max-w-none text-violet-900">
-        <div dangerouslySetInnerHTML={{ __html: article.content }} />
-      </article>
-    </main>
+  {article.coverImage && (
+    <Image
+      src={imageUrl}
+      alt={article.slug}
+      className="w-full rounded-lg mb-6 border border-violet-100 shadow"
+      width={800}
+      height={400}
+    />
+  )}
+
+  <p className="text-base sm:text-lg text-gray-700 mb-6 bg-violet-50 p-4 rounded border-l-4 border-violet-400 shadow-sm">
+    {article.description}
+  </p>
+
+  <article className="prose prose-sm sm:prose-lg max-w-none text-violet-900">
+    <div dangerouslySetInnerHTML={{ __html: article.content }} />
+  </article>
+</main>
+
   );
 }

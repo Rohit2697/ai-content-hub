@@ -78,34 +78,57 @@ export default function PostArticleForm() {
   };
 
   if (initializing) {
-    return (<div className="min-h-screen flex items-center justify-center bg-white">
-      <Spinner size="large" className="text-violet-600" />
-    </div>)
-  }
-  return (
-    <div className="min-h-screen max-w-4xl mx-auto px-4 py-10 bg-white rounded-xl shadow-md">
-      {loading && <div className="absolute inset-0 z-10 flex items-center justify-center  bg-opacity-60 rounded-xl">
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white px-4">
         <Spinner size="large" className="text-violet-600" />
-      </div>}
-      {successAlert && <SaveArticleAlert redirectTime={redirectTime} message={successAlert} />}
-      {errorMessage && <ErrorAlert message={errorMessage} setError={setErrorMessage} />}
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative min-h-screen max-w-4xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-12 bg-white rounded-xl shadow-md">
+      {loading && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/60 rounded-xl px-4">
+          <Spinner size="large" className="text-violet-600" />
+        </div>
+      )}
+
+      {successAlert && (
+        <SaveArticleAlert
+          redirectTime={redirectTime}
+          message={successAlert}
+        />
+      )}
+      {errorMessage && (
+        <ErrorAlert
+          message={errorMessage}
+          setError={setErrorMessage}
+        />
+      )}
+
       <div className="mb-6">
         <Button
           onClick={() => setShowDialog(true)}
-          className="bg-violet-600 hover:bg-violet-700 text-white rounded px-4 py-2 shadow"
+          className="bg-violet-600 hover:bg-violet-700 text-white rounded px-4 py-2 shadow w-full sm:w-auto"
         >
           ✨ Generate Article with AI
         </Button>
-        {showDialog && <PromptDialogue
-          editorInstace={editorInstace}
-          showDialog={showDialog}
-          setShowDialog={setShowDialog} />}
+        {showDialog && (
+          <PromptDialogue
+            editorInstace={editorInstace}
+            showDialog={showDialog}
+            setShowDialog={setShowDialog}
+          />
+        )}
       </div>
+
       <ArticleForm
         loading={loading}
         articleAction={postArticle}
-        articleVariant='Save'
-        setEditorInstace={setEditorInstace} />
+        articleVariant="Save"
+        setEditorInstace={setEditorInstace}
+      />
     </div>
   );
+
 }

@@ -14,8 +14,9 @@ const ShowArticles = ({ articles }: { articles: Article[] }) => {
     const [loading, setLoading] = useState(true)
     const [initializing, setInitializing] = useState(false)
     //const { heading } = useHeadingStore()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     useEffect(() => { setInitializing(true) }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => clearArticleData(), [])
     useEffect(() => {
         if (articles.length) {
@@ -25,23 +26,26 @@ const ShowArticles = ({ articles }: { articles: Article[] }) => {
     }, [articles, setPosts])
 
     if (!initializing) return null
-    if (loading) return <Spinner size="large" className='text-violet-600' />
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-[200px]">
+                <Spinner size="large" className="text-violet-600" />
+            </div>
+        );
+    }
 
     if (!posts.length) {
-        return <NoArtilce />
+        return <NoArtilce />;
     }
 
     return (
-        <>
-
-            <div className="grid gap-8 md:grid-cols-2">
-                {posts.map((article, index) => (
-                    <ArticleCard key={index} {...article} />
-                ))}
-            </div>
-        </>
-
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {posts.map((article, index) => (
+                <ArticleCard key={index} {...article} />
+            ))}
+        </div>
     );
+
 }
 
 export default ShowArticles;

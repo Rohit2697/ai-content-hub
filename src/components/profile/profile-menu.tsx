@@ -42,26 +42,31 @@ const ProfileMenu = () => {
     }
     return (
         <DropdownMenuContent
-            className="mt-2 w-40 rounded-lg border border-gray-200 bg-white p-2 shadow-xl animate-in fade-in slide-in-from-top-2"
+            className="mt-2 w-44 sm:w-48 rounded-lg border border-gray-200 bg-white p-2 shadow-xl animate-in fade-in slide-in-from-top-2"
             align="end"
         >
-            <DropdownMenuGroup>
-                <DropdownMenuItem className="hover:bg-violet-100 text-sm font-medium cursor-pointer transition-colors" onClick={handleLogout}>
+            <DropdownMenuGroup className="space-y-1">
+                <DropdownMenuItem
+                    className="hover:bg-violet-100 text-sm font-medium cursor-pointer transition-colors rounded px-3 py-2"
+                    onClick={handleLogout}
+                >
                     Logout
                 </DropdownMenuItem>
 
-                <DropdownMenuItem className="hover:bg-violet-100 text-sm font-medium cursor-pointer transition-colors" onClick={handleMyArticle}>
+                <DropdownMenuItem
+                    className="hover:bg-violet-100 text-sm font-medium cursor-pointer transition-colors rounded px-3 py-2"
+                    onClick={handleMyArticle}
+                >
                     My Article
                 </DropdownMenuItem>
                 <Link href="/apikeys">
-                    <DropdownMenuItem className="hover:bg-violet-100 text-sm font-medium cursor-pointer transition-colors" >
+                    <DropdownMenuItem className="hover:bg-violet-100 text-sm font-medium cursor-pointer transition-colors rounded px-3 py-2" >
                         API Keys
                     </DropdownMenuItem>
                 </Link>
-
-
             </DropdownMenuGroup>
         </DropdownMenuContent>
+
     );
 }
 

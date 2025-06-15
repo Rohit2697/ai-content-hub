@@ -26,7 +26,15 @@ export const readTime = (content: string): string => {
 
 export function timestampToDateTimeString(timestamp: number): string {
   const date = new Date(timestamp);
-  return date.toISOString().replace(/T/, " ").slice(0, -5); // "2022-03-14T16:39:12.000Z" -> "2022-03-14 16:39:12"
+  return date.toLocaleString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true, 
+  });
 }
 
 export const generateToken = (userId: string, email: string, name: string) => {
@@ -45,9 +53,8 @@ interface TokenPayload {
 
 export const decodedToken = (token: string): TokenPayload | undefined => {
   try {
-    
     const decoded = jwt.verify(token, "ai-knowledge-content");
-    
+
     // Ensure it's an object and matches the expected structure
     if (
       typeof decoded === "object" &&

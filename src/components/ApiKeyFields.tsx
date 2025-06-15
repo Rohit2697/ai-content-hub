@@ -84,17 +84,20 @@ const ApiKeyFields = ({ open, setOpen, fetchNewKeys }: { open: boolean, setOpen:
         }
     };
     return (
-        <div className="fixed inset-0 flex items-center justify-center  z-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+            <div className="bg-white w-full max-w-md p-4 sm:p-6 rounded-lg shadow-lg relative space-y-4 animate-fade-in">
 
-            <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg relative space-y-4">
                 <Button
                     onClick={() => setOpen(false)}
-                    className="absolute top-2 right-3 text-gray-500 hover:text-gray-800"
+                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-lg"
+                    aria-label="Close configuration modal"
                 >
                     ✕
                 </Button>
 
-                <h2 className="text-lg font-bold text-violet-700">Configure OpenAI</h2>
+                <h2 className="text-base sm:text-lg font-bold text-violet-700 text-center sm:text-left">
+                    Configure OpenAI
+                </h2>
 
                 <Input
                     type="password"
@@ -102,27 +105,30 @@ const ApiKeyFields = ({ open, setOpen, fetchNewKeys }: { open: boolean, setOpen:
                     value={apiKey}
                     ref={inputRef}
                     onChange={(e) => setApiKey(e.target.value.trim())}
-                    className="rounded border-gray-300 shadow-sm focus:ring-violet-500 focus:border-violet-500"
+                    className="w-full rounded border-gray-300 shadow-sm focus:ring-violet-500 focus:border-violet-500 text-sm"
                 />
 
                 <Button
                     onClick={validateAndFetchModels}
                     disabled={loading || !apiKey}
-                    className="bg-violet-600 text-white px-4 py-2 rounded w-full mt-2 disabled:opacity-50"
+                    className="bg-violet-600 text-white w-full rounded py-2 disabled:opacity-50"
                 >
                     {loading ? 'Validating...' : 'Validate API Key'}
                 </Button>
 
                 {error && (
-                    <p className="text-red-600 text-sm bg-red-100 px-3 py-2 rounded break-words max-w-full overflow-hidden">{error}</p>
+                    <p className="text-red-600 text-sm bg-red-100 px-3 py-2 rounded break-words overflow-hidden">
+                        {error}
+                    </p>
                 )}
 
                 {models.length > 0 && (
-                    <div className="space-y-2">
-                        <label className="text-violet-700 block text-sm font-medium ">Select Model</label>
+                    <div className="space-y-3">
+                        <label className="block text-sm font-medium text-violet-700">
+                            Select Model
+                        </label>
                         <select
-                            className="w-full border px-3 py-2 text-sm  border-gray-300 shadow-sm 
-             focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 rounded"
+                            className="w-full border px-3 py-2 text-sm border-gray-300 rounded shadow-sm focus:ring-violet-500 focus:border-violet-500"
                             value={selectedModel}
                             onChange={(e) => setSelectedModel(e.target.value)}
                         >
@@ -137,7 +143,7 @@ const ApiKeyFields = ({ open, setOpen, fetchNewKeys }: { open: boolean, setOpen:
                         <Button
                             onClick={saveToDB}
                             disabled={!selectedModel || isSaveingDV}
-                            className="bg-green-600 text-white px-4 py-2 rounded w-full mt-2 disabled:opacity-50"
+                            className="bg-green-600 text-white w-full rounded py-2 disabled:opacity-50"
                         >
                             {isSaveingDV ? 'Saving...' : 'Save Settings'}
                         </Button>
@@ -145,6 +151,7 @@ const ApiKeyFields = ({ open, setOpen, fetchNewKeys }: { open: boolean, setOpen:
                 )}
             </div>
         </div>
+
     );
 }
 

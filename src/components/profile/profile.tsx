@@ -9,12 +9,16 @@ const Profile = ({ name }: { name: string, userId: string }) => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <button className="outline-none focus:ring-2 focus:ring-violet-400 rounded-full transition">
+                <button
+                    className="rounded-full focus:outline-none focus:ring-2 focus:ring-violet-400 transition-shadow hover:shadow-md p-1 sm:p-0"
+                    aria-label="Open profile menu"
+                >
                     <AvatarIcon name={name} />
                 </button>
-            </DropdownMenuTrigger >
+            </DropdownMenuTrigger>
             <ProfileMenu />
         </DropdownMenu>
+
     );
 }
 

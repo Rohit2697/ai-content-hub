@@ -59,30 +59,30 @@ const SearchBox = () => {
         searchArticles(debounceValue)
     }, [debounceValue, setPosts])
     return (
-        <div className="relative w-full max-w-xs md:max-w-md">
-            <Input
-                type="text"
+<div className="relative w-full max-w-[250px] sm:max-w-xs md:max-w-md">
+  <Input
+    type="text"
+    value={searchValue}
+    placeholder="Search articles..."
+    onChange={onSearchBoxChange}
+    className="w-full pl-10 pr-4 py-2 text-sm sm:text-base border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+  />
+  <svg
+    className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400 pointer-events-none"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"
+    />
+  </svg>
+</div>
 
-                value={searchValue}
-                placeholder="Search articles..."
-                onChange={onSearchBoxChange}
-                className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
-            />
-            <svg
-                className="absolute left-3 top-2.5 h-4 w-4 text-gray-400"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-            >
-                <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"
-                />
-            </svg>
-        </div>
     );
 }
 

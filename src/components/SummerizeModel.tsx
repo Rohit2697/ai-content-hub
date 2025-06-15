@@ -55,7 +55,7 @@ export default function SummarizerModal({ content, setError, article_id }: { art
     <>
       <Button
         onClick={handleSummerizing}
-        className="bg-violet-600 text-white px-4 py-2 rounded-md shadow hover:bg-violet-700 transition"
+        className="bg-violet-600 text-white px-4 py-2 rounded-md shadow hover:bg-violet-700 transition w-full sm:w-auto"
       >
         {isSummerizing ? (
           <div className="flex items-center gap-2">
@@ -68,22 +68,25 @@ export default function SummarizerModal({ content, setError, article_id }: { art
       </Button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-xl p-6 relative animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 sm:px-0">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-xl p-4 sm:p-6 relative animate-fade-in max-h-[90vh] overflow-y-auto">
             <button
-              className="absolute top-2 right-3 text-gray-400 hover:text-gray-600"
+              className="absolute top-2 right-3 text-gray-400 hover:text-gray-600 text-xl"
               onClick={() => setIsOpen(false)}
             >
               ✕
             </button>
-            <h2 className="text-xl font-semibold text-violet-700 mb-4">
+
+            <h2 className="text-lg sm:text-xl font-semibold text-violet-700 mb-4">
               Article Summary
             </h2>
-            <div className="text-gray-700 leading-relaxed whitespace-pre-wrap max-h-80 overflow-y-auto p-4 bg-violet-50 rounded-md border border-violet-200">
+
+            <div className="text-sm sm:text-base text-gray-700 leading-relaxed whitespace-pre-wrap max-h-80 sm:max-h-96 overflow-y-auto p-3 sm:p-4 bg-violet-50 rounded-md border border-violet-200">
               {summary}
             </div>
           </div>
         </div>
+
       )}
     </>
   );

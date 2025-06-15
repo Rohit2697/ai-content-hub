@@ -50,9 +50,15 @@ export default function TiptapEditor({ content, onChange, onEditorReady }: TipTa
   }, [editor, onEditorReady])
 
   return (
-    <div className="mb-6">
-      <EditorMenu editor={editor} />
-      <EditorContent editor={editor} />
-    </div>
+<div className="mb-6">
+  <div className="rounded-t-md border border-b-0 border-gray-300 bg-violet-50 p-2 sm:p-3 shadow-sm overflow-x-auto">
+    <EditorMenu editor={editor} />
+  </div>
+
+  <div className="rounded-b-md border border-gray-300 p-2 sm:p-4 shadow-sm min-h-[200px] sm:min-h-[300px] bg-white">
+    <EditorContent editor={editor} />
+  </div>
+</div>
+
   );
 }

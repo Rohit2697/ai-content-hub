@@ -67,14 +67,19 @@ const LoginForm = () => {
         }
     }
     return (
-        <div className="flex items-center justify-center ">
-            {loading && <div className="absolute inset-0 z-10 flex items-center justify-center  bg-opacity-60 rounded-xl">
-                <Spinner size="large" className="text-violet-600" />
-            </div>}
-            <Card className={cn(
-                "shadow-lg border w-[400px] border-gray-200 rounded-xl bg-white transition-opacity duration-300",
-                loading ? "opacity-50 pointer-events-none" : "opacity-100"
-            )}>
+        <div className="flex items-center justify-center min-h-screen px-4">
+            {loading && (
+                <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/60 rounded-xl">
+                    <Spinner size="large" className="text-violet-600" />
+                </div>
+            )}
+
+            <Card
+                className={cn(
+                    "w-full max-w-md sm:w-[400px] border border-gray-200 rounded-xl bg-white shadow-lg transition-opacity duration-300",
+                    loading ? "opacity-50 pointer-events-none" : "opacity-100"
+                )}
+            >
                 <CardHeader className="text-center space-y-1">
                     <CardTitle className="text-2xl font-bold text-violet-700">
                         AI-Powered Knowledge Hub
@@ -86,6 +91,7 @@ const LoginForm = () => {
 
                 <CardContent>
                     <form className="space-y-4" onSubmit={handleSubmit}>
+                        {/* Email */}
                         <div className="flex flex-col space-y-1">
                             <Label htmlFor="email" className="text-sm font-medium text-gray-700">
                                 Email
@@ -96,10 +102,12 @@ const LoginForm = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 type="email"
+                                required
                                 className="rounded-lg border-gray-300 focus:ring-2 focus:ring-violet-500 focus:outline-none"
                             />
                         </div>
 
+                        {/* Password */}
                         <div className="flex flex-col space-y-1">
                             <Label htmlFor="password" className="text-sm font-medium text-gray-700">
                                 Password
@@ -110,10 +118,17 @@ const LoginForm = () => {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
+                                required
                                 className="rounded-lg border-gray-300 focus:ring-2 focus:ring-violet-500 focus:outline-none"
                             />
                         </div>
-                        {error && <p className="text-red-600 mb-4 text-sm  text-center">{error}</p>}
+
+                        {/* Error Message */}
+                        {error && (
+                            <p className="text-red-600 mb-4 text-sm text-center">{error}</p>
+                        )}
+
+                        {/* Buttons */}
                         <div className="flex flex-col sm:flex-row gap-3 justify-center items-center w-full">
                             <Button
                                 type="submit"
@@ -121,6 +136,7 @@ const LoginForm = () => {
                             >
                                 Login
                             </Button>
+
                             <Link href="/signup" className="w-full sm:w-1/2">
                                 <Button
                                     type="button"
@@ -131,9 +147,6 @@ const LoginForm = () => {
                                 </Button>
                             </Link>
                         </div>
-
-
-
                     </form>
                 </CardContent>
 
@@ -142,6 +155,7 @@ const LoginForm = () => {
                 </CardFooter>
             </Card>
         </div>
+
 
 
     );

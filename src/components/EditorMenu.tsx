@@ -31,7 +31,7 @@ export default function EditorMenu({ editor }: { editor: Editor | null }) {
   return (
     <ToggleGroup
       type="single"
-      className="flex flex-wrap gap-2 bg-violet-50 p-3 rounded-xl shadow-md mb-4"
+      className="flex flex-wrap items-center gap-2 bg-violet-50 p-2 sm:p-3 rounded-xl shadow-md mb-4"
     >
       {options.map((option, index) => (
         <ToggleGroupItem
@@ -40,15 +40,20 @@ export default function EditorMenu({ editor }: { editor: Editor | null }) {
           onClick={option.onClick}
           aria-pressed={option.pressed}
           aria-label={option.value}
-          className={`p-2 rounded-lg transition-colors duration-150 border border-violet-300 shadow-sm
-            ${option.pressed
+          className={`
+        p-2 sm:p-2.5 rounded-md transition-colors duration-150 border border-violet-300 shadow-sm
+        flex items-center justify-center
+        ${option.pressed
               ? 'bg-violet-600 text-white hover:bg-violet-700'
               : 'bg-white text-violet-600 hover:bg-violet-100'
-            }`}
+            }
+        w-9 h-9 sm:w-10 sm:h-10
+      `}
         >
           {option.icon}
         </ToggleGroupItem>
       ))}
     </ToggleGroup>
+
   );
 }

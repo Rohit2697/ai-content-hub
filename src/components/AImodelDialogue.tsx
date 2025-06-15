@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 
 import ApiKeyFields from './ApiKeyFields';
 
-export default function AImodelDialogue({fetchApiKeys}:{fetchApiKeys:()=>Promise<void>}) {
+export default function AImodelDialogue({ fetchApiKeys }: { fetchApiKeys: () => Promise<void> }) {
     const [open, setOpen] = useState(false);
 
 
@@ -19,13 +19,14 @@ export default function AImodelDialogue({fetchApiKeys}:{fetchApiKeys:()=>Promise
         <>
             <Button
                 onClick={handleOpenAPI}
-                className="bg-violet-600 hover:bg-violet-700 text-white shadow-md"
+                className="w-full sm:w-auto bg-violet-600 hover:bg-violet-700 text-white shadow-md px-4 py-2 rounded transition duration-200 text-sm sm:text-base"
                 variant="default"
             >
-                Add Open AI API Key
+                Add OpenAI API Key
             </Button>
 
-            {open && <ApiKeyFields open={open} setOpen={setOpen} fetchNewKeys={fetchApiKeys}/>}
+
+            {open && <ApiKeyFields open={open} setOpen={setOpen} fetchNewKeys={fetchApiKeys} />}
         </>
     );
 }

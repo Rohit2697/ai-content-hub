@@ -73,66 +73,84 @@ export default function MyAPIKeys() {
     }
     useEffect(() => {
         fetchApikeys()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     if (loading) {
         return (
-            <div className="absolute inset-0 z-10 flex items-center justify-center  bg-opacity-60 rounded-xl">
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/60 rounded-xl px-4">
                 <Spinner size="large" className="text-violet-600" />
             </div>
-        )
+        );
     }
+
     return (
-        <main className="max-w-3xl mx-auto ">
-            {openEdit && <ApiKeyFields open={openEdit} setOpen={setOpenEdit} fetchNewKeys={fetchApikeys} />}
+        <main className="max-w-3xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10">
+            {openEdit && (
+                <ApiKeyFields
+                    open={openEdit}
+                    setOpen={setOpenEdit}
+                    fetchNewKeys={fetchApikeys}
+                />
+            )}
 
+            {fetchApiKeyError && (
+                <ErrorAlert
+                    message={fetchApiKeyError}
+                    setError={setFetchAPIKeyError}
+                />
+            )}
 
-            {fetchApiKeyError && <ErrorAlert message={fetchApiKeyError} setError={setFetchAPIKeyError} />}
-            <h1 className="text-4xl font-extrabold mb-10 text-violet-700 border-b-4 border-violet-300 pb-2">
+            <h1 className="text-2xl sm:text-4xl font-extrabold mb-6 sm:mb-10 text-violet-700 border-b-2 sm:border-b-4 border-violet-300 pb-2">
                 My API Key
             </h1>
-            {!apikeyObj?.open_ai_token && <div className='my-2 flex justify-center'>
-                <AImodelDialogue fetchApiKeys={fetchApikeys} />
-            </div>}
-            {apikeyObj?.open_ai_token && apikeyObj.model && <div className={cn("space-y-4", deleting ? "opacity-50 pointer-events-none" : "opacity-100")}>
 
-                <div
-
-                    className="border border-violet-600 p-4 rounded-lg bg-white shadow-sm relative"
-                >
-                    {deleting &&
-                        <div className='absolute inset-0 z-10 flex justify-center'>
-                            <Spinner size="small" className='text-violet-600' />
-                        </div>
-                    }
-                    <div className="absolute top-2 right-2 flex gap-2">
-                        <Button
-                            onClick={() => setOpenEdit(true)}
-                            className="text-blue-600 hover:text-blue-800 p-1"
-                            variant="ghost"
-                            size="icon"
-                        >
-                            <CiEdit className="w-5 h-5" />
-                        </Button>
-                        <Button
-                            onClick={handleDelete}
-                            className="text-red-600 hover:text-red-800 p-1"
-                            variant="ghost"
-                            size="icon"
-                        >
-                            <RiDeleteBin6Line className="w-5 h-5" />
-                        </Button>
-                    </div>
-
-
-
-                    <div className="text-md text-violet-600 font-semibold">API Key: {apikeyObj.open_ai_token.slice(0, 3) + "-************************"}</div>
-                    <div className="text-md text-violet-600 font-semibold">Model: {apikeyObj.model}</div>
-
+            {!apikeyObj?.open_ai_token && (
+                <div className="my-4 flex justify-center">
+                    <AImodelDialogue fetchApiKeys={fetchApikeys} />
                 </div>
+            )}
 
-            </div>}
+            {apikeyObj?.open_ai_token && apikeyObj.model && (
+                <div className={cn(
+                    "space-y-4",
+                    deleting ? "opacity-50 pointer-events-none" : "opacity-100"
+                )}>
+                    <div className="relative border border-violet-600 p-4 rounded-lg bg-white shadow-sm">
+                        {deleting && (
+                            <div className="absolute inset-0 z-10 flex justify-center items-center bg-white/60 rounded-lg">
+                                <Spinner size="small" className="text-violet-600" />
+                            </div>
+                        )}
 
+                        <div className="absolute top-2 right-2 flex gap-2">
+                            <Button
+                                onClick={() => setOpenEdit(true)}
+                                className="text-blue-600 hover:text-blue-800 p-1"
+                                variant="ghost"
+                                size="icon"
+                            >
+                                <CiEdit className="w-5 h-5" />
+                            </Button>
+                            <Button
+                                onClick={handleDelete}
+                                className="text-red-600 hover:text-red-800 p-1"
+                                variant="ghost"
+                                size="icon"
+                            >
+                                <RiDeleteBin6Line className="w-5 h-5" />
+                            </Button>
+                        </div>
+
+                        <div className="text-sm sm:text-base text-violet-600 font-semibold break-all">
+                            API Key: {apikeyObj.open_ai_token.slice(0, 3) + "-*******"}
+                        </div>
+                        <div className="text-sm sm:text-base text-violet-600 font-semibold">
+                            Model: {apikeyObj.model}
+                        </div>
+                    </div>
+                </div>
+            )}
         </main>
     );
+
 }
