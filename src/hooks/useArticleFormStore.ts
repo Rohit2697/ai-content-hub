@@ -6,7 +6,8 @@ interface ArticleFormData {
   description: string;
   coverimage: File | null;
   tags: string;
-  imageUrl?:string;
+  imageUrl?: string;
+  isGenerating?: boolean;
 }
 
 interface ArticleFormStrore {

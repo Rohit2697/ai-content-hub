@@ -1,56 +1,58 @@
 'use client';
+
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 import { Button } from './ui/button';
 import Profile from './profile/profile';
 import SearchBox from './SearchBox';
 import { useUserStore } from '@/hooks/useUserStore';
 import { useHeadingStore } from '@/hooks/useHeadingStore';
-import { useRouter } from 'next/navigation';
-import { usePostStore } from '@/hooks/usePostStore';
-
+import NavbarSkeleton from './skeleton/navbar-skeleton';
 
 export default function Navbar() {
-  const { user, setUser } = useUserStore()
-  const { clearHeading } = useHeadingStore()
-  const { clearPosts } = usePostStore()
-  const [initializing, setInitializing] = useState(false)
+  const { user, setUser, clearUser } = useUserStore();
+  const { clearHeading } = useHeadingStore();
+  const router = useRouter();
+  const pathname = usePathname();
 
-  const router = useRouter()
+  const [fetchingUser, setFetchingUser] = useState(false);
 
-  const notAllowedPath = ['/login', '/signup']
+  const notAllowedPaths = ['/login', '/signup'];
+  const shouldHideNavbar = notAllowedPaths.includes(pathname);
 
   useEffect(() => {
-    setInitializing(true)
-  }, [])
-  useEffect(() => {
+    if (user || shouldHideNavbar) return;
 
-    if (user) return
     const fetchUser = async () => {
-      const res = await fetch('/api/user/me')
-      if (res.status == 401 || !res.ok) {
-        router.push('/login')
-        return
+      setFetchingUser(true);
+      try {
+        const res = await fetch('/api/user/me');
+        if (!res.ok || res.status === 401) {
+          clearUser();
+          router.push('/login');
+        } else {
+          const data = await res.json();
+          setUser({
+            name: data.name,
+            email: data.email,
+            user_id: data.userId,
+          });
+        }
+      } catch {
+        clearUser();
+      } finally {
+        setFetchingUser(false);
       }
-      const data = await res.json()
-      const updateUser = {
-        name: data.name,
-        email: data.email,
-        user_id: data.userId
-      }
-      setUser(updateUser)
-    }
-    fetchUser()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, router])
-  if (!initializing) return null
-  if (typeof window !== "undefined") {
-    if (notAllowedPath.includes(window.location.pathname)) {
-      return null
-    }
-  }
+    };
 
-  if (!user) return null
+    fetchUser();
+  }, [user, pathname, router, setUser, clearUser, shouldHideNavbar]);
+
+  if (shouldHideNavbar) return null;
+  if (fetchingUser) return <NavbarSkeleton />;
+  if (!user) return null;
+
   return (
     <nav className="w-full px-4 py-4 bg-white shadow-md border-b border-violet-200">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
@@ -69,19 +71,16 @@ export default function Navbar() {
           </div>
 
           <Link href="/articles/new" className="w-full sm:w-auto">
-            <Button className="w-full sm:w-auto bg-violet-600 hover:bg-violet-700 text-white shadow-md" onClick={clearPosts}>
+            <Button className="w-full sm:w-auto bg-violet-600 hover:bg-violet-700 text-white shadow-md">
               Post Article
             </Button>
           </Link>
 
-          {user && (
-            <div className="w-full sm:w-auto">
-              <Profile name={user.name} userId={user.user_id} />
-            </div>
-          )}
+          <div className="w-full sm:w-auto">
+            <Profile name={user.name} userId={user.user_id} />
+          </div>
         </div>
       </div>
     </nav>
-
   );
 }

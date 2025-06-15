@@ -3,10 +3,12 @@ import React, { useEffect, useState } from 'react';
 import ArticleCard from './ArticleCard';
 import { Article } from '@/app/articles/article-type';
 import { usePostStore } from '@/hooks/usePostStore';
-import NoArtilce from './NoArtilce';
+
 
 import { Spinner } from './ui/spinner';
 import { useArticleFormStore } from '@/hooks/useArticleFormStore';
+import ArticlecardSkeleton from './skeleton/articlecard-skeleton';
+import NoArticle from './NoArticle';
 //import { useHeadingStore } from '@/hooks/useHeadingStore';
 const ShowArticles = ({ articles }: { articles: Article[] }) => {
     const { posts, setPosts } = usePostStore()
@@ -25,7 +27,13 @@ const ShowArticles = ({ articles }: { articles: Article[] }) => {
         setLoading(false)
     }, [articles, setPosts])
 
-    if (!initializing) return null
+    if (!initializing) return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <ArticlecardSkeleton />
+            <ArticlecardSkeleton />
+            <ArticlecardSkeleton />
+        </div>
+    )
     if (loading) {
         return (
             <div className="flex justify-center items-center min-h-[200px]">
@@ -35,7 +43,7 @@ const ShowArticles = ({ articles }: { articles: Article[] }) => {
     }
 
     if (!posts.length) {
-        return <NoArtilce />;
+        return <NoArticle />;
     }
 
     return (

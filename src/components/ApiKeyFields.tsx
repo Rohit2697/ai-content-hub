@@ -13,7 +13,6 @@ const ApiKeyFields = ({ open, setOpen, fetchNewKeys }: { open: boolean, setOpen:
     const [isSaveingDV, setIssaveingDB] = useState(false)
     const router = useRouter();
     interface Model {
-
         id: string;
         object: string;
         created: number,

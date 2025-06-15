@@ -11,6 +11,7 @@ import { Textarea } from "./ui/textarea";
 import TiptapEditor from "./TiptapEditor";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
+import ArticleFormGenerateSkeleton from "./skeleton/article-form-generate-skeleton";
 
 interface ArticleFormActionParams {
     title: string;
@@ -62,7 +63,7 @@ export default function ArticleForm({ loading, setEditorInstace, articleAction, 
 
 
 
-
+    if (articleData?.isGenerating) return <ArticleFormGenerateSkeleton />
     if (preview) {
         return <PreviewArticle setPreview={setPreview} />
     }

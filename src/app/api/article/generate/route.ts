@@ -20,6 +20,8 @@ export async function POST(req: NextRequest) {
     );
     if (!article)
       return errorResponseObject("Unable to generate Article!", 500);
+    else if (Object.values(article).some((value) => value == ""))
+      return errorResponseObject("AI returned empty content,try again!", 422);
     return NextResponse.json(article);
   } catch {
     return errorResponseObject("Unable to generate Summery!", 500);

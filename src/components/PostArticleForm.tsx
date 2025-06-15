@@ -8,6 +8,7 @@ import PromptDialogue from './PromptDialogue';
 import type { Editor } from '@tiptap/react';
 import ArticleForm from './ArticleForm';
 import { useRouter } from 'next/navigation';
+import { useArticleFormStore } from '@/hooks/useArticleFormStore';
 export default function PostArticleForm() {
   const [redirectTime, setRedirectTime] = useState(3);
   const [successAlert, setSuccessAlert] = useState('');
@@ -17,8 +18,11 @@ export default function PostArticleForm() {
   const [showDialog, setShowDialog] = useState(false);
   const [editorInstace, setEditorInstace] = useState<Editor | null>(null)
   const router = useRouter()
+  const { clearArticleData } = useArticleFormStore()
   useEffect(() => {
+    clearArticleData()
     setInitializing(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

@@ -116,35 +116,35 @@ const EditArticleCmp = ({ id }: { id: string }) => {
 
     };
 
- if (initializing) {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4">
-      <Spinner size="large" className="text-violet-600" />
-    </div>
-  );
-}
+    if (initializing) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-white px-4">
+                <Spinner size="large" className="text-violet-600" />
+            </div>
+        );
+    }
 
-return (
-  <div className="relative min-h-screen max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-10 bg-white rounded-lg shadow-md">
-    {loading && (
-      <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/60 rounded-lg px-4">
-        <Spinner size="large" className="text-violet-600" />
-      </div>
-    )}
+    return (
+        <div className="relative min-h-screen max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-10 bg-white rounded-lg shadow-md">
+            {loading && (
+                <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/60 rounded-lg px-4">
+                    <Spinner size="large" className="text-violet-600" />
+                </div>
+            )}
 
-    {successAlert && <SaveArticleAlert redirectTime={redirectTime} message={successAlert} />}
-    {errorMessage && <ErrorAlert message={errorMessage} setError={setErrorMessage} />}
+            {successAlert && <SaveArticleAlert redirectTime={redirectTime} message={successAlert} />}
+            {errorMessage && <ErrorAlert message={errorMessage} setError={setErrorMessage} />}
 
-    <div className="mb-6">
-      <ArticleForm
-        loading={loading}
-        setEditorInstace={setEditorInstace}
-        articleVariant="Edit"
-        articleAction={editArticle}
-      />
-    </div>
-  </div>
-);
+            <div className="mb-6">
+                <ArticleForm
+                    loading={loading}
+                    setEditorInstace={setEditorInstace}
+                    articleVariant="Edit"
+                    articleAction={editArticle}
+                />
+            </div>
+        </div>
+    );
 
 }
 

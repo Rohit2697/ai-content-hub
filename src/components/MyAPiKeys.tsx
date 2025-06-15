@@ -10,6 +10,7 @@ import ErrorAlert from './ErrorAlert';
 import ApiKeyFields from './ApiKeyFields';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import MyapiKeysSkeleton from './skeleton/myapi-keys-skeleton';
 
 
 
@@ -77,9 +78,7 @@ export default function MyAPIKeys() {
     }, [])
     if (loading) {
         return (
-            <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/60 rounded-xl px-4">
-                <Spinner size="large" className="text-violet-600" />
-            </div>
+            <MyapiKeysSkeleton />
         );
     }
 
