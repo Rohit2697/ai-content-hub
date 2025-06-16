@@ -16,6 +16,11 @@ import { useRouter } from 'next/navigation';
 import { Spinner } from '../ui/spinner';
 import { cn } from '@/lib/utils';
 import { useUserStore } from '@/hooks/useUserStore';
+import { useArticleFormStore } from '@/hooks/useArticleFormStore';
+import { useFetchStore } from '@/hooks/useFetchStore';
+import { usePostStore } from '@/hooks/usePostStore';
+import { useArticleSkeleton } from '@/hooks/useArticleSkeleton';
+
 
 
 const LoginForm = () => {
@@ -23,10 +28,20 @@ const LoginForm = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
+    const {resetShow}=useArticleSkeleton()
+
+    const { clearArticleData } = useArticleFormStore()
+    const { resetFetchALL } = useFetchStore()
+    const { clearPosts } = usePostStore()
+
     const router = useRouter()
     const { setUser } = useUserStore()
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        resetFetchALL()
+        clearArticleData()
+        clearPosts()
+        resetShow()
         setLoading(true)
         if (!email || !password) {
             setLoading(false)

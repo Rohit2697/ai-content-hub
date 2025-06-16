@@ -46,6 +46,7 @@ const PromptDialogue = ({ editorInstace, setShowDialog, showDialog }: PromptDial
         },
         body: JSON.stringify({ prompt })
       })
+       setArticleData({ ...articleData, isGenerating: false })
       if (res.status == 401) {
         router.push('/login')
         return

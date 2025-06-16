@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 
 import { db } from "@/db";
+import { Article, DBArticle } from "@/app/articles/article-type";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -33,7 +34,7 @@ export function timestampToDateTimeString(timestamp: number): string {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
-    hour12: true, 
+    hour12: true,
   });
 }
 
@@ -110,4 +111,13 @@ export const getUser_from_token = async (req: NextRequest) => {
     console.log("Unable to get user from token", err);
     return null;
   }
+};
+
+export const mapDBArticles = (articles: DBArticle[]): Article[] => {
+  return articles.map((article) => {
+    return {
+      ...article,
+      tags: article.tags ? JSON.parse(article.tags) : "",
+    };
+  });
 };

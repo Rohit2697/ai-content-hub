@@ -8,6 +8,8 @@ import { useUserStore } from '@/hooks/useUserStore';
 import { useArticleFormStore } from '@/hooks/useArticleFormStore';
 import { useHeadingStore } from '@/hooks/useHeadingStore';
 import { useRouter } from 'next/navigation';
+import { useFetchStore } from '@/hooks/useFetchStore';
+import { useArticleSkeleton } from '@/hooks/useArticleSkeleton';
 
 const ProfileMenu = () => {
     const { clearUser } = useUserStore()
@@ -16,6 +18,8 @@ const ProfileMenu = () => {
     const { setHeading } = useHeadingStore()
     const { setPosts } = usePostStore()
     const [initializing, setInitializing] = useState(false)
+    const { setFetchAll } = useFetchStore()
+    const { setShow, resetShow } = useArticleSkeleton()
     const router = useRouter()
     useEffect(() => {
         setInitializing(true)
@@ -36,12 +40,18 @@ const ProfileMenu = () => {
 
     const handleMyArticle = async () => {
         setHeading('My Articles')
+        setFetchAll(false)
+        setShow(true)
         try {
             const res = await fetch('/api/user/articles')
             if (!res.ok) return setPosts([])
+
             setPosts(await res.json())
+            resetShow()
+
         } catch {
             setPosts([])
+            resetShow()
         }
         router.push('/')
     }

@@ -9,6 +9,8 @@ import type { Editor } from '@tiptap/react';
 import ArticleForm from './ArticleForm';
 import { useRouter } from 'next/navigation';
 import { useArticleFormStore } from '@/hooks/useArticleFormStore';
+import { useFetchStore } from '@/hooks/useFetchStore';
+import { useHeadingStore } from '@/hooks/useHeadingStore';
 export default function PostArticleForm() {
   const [redirectTime, setRedirectTime] = useState(3);
   const [successAlert, setSuccessAlert] = useState('');
@@ -17,6 +19,8 @@ export default function PostArticleForm() {
   const [loading, setLoading] = useState(false)
   const [showDialog, setShowDialog] = useState(false);
   const [editorInstace, setEditorInstace] = useState<Editor | null>(null)
+  const { resetFetchALL } = useFetchStore()
+  const { clearHeading } = useHeadingStore()
   const router = useRouter()
   const { clearArticleData } = useArticleFormStore()
   useEffect(() => {
@@ -27,8 +31,11 @@ export default function PostArticleForm() {
 
   useEffect(() => {
     if (redirectTime === 0 && successAlert) {
+      resetFetchALL()
+      clearHeading()
       router.push('/')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [redirectTime, successAlert, router])
 
 
@@ -70,6 +77,7 @@ export default function PostArticleForm() {
         setRedirectTime((prev) => {
           if (prev <= 1) {
             clearInterval(countdownInterval);
+
           }
           return prev - 1;
         });

@@ -27,7 +27,7 @@ export default function ArticleCard({
           <p className="line-clamp-3">
             {description}
           </p>
-          {description.length > 200 && (
+          {description.length && (
             <span className="text-violet-700 font-semibold">
               ...Read More
             </span>

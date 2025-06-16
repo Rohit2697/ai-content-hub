@@ -17,6 +17,10 @@ import Link from 'next/link';
 import { Spinner } from '../ui/spinner';
 import { cn } from '@/lib/utils';
 import { useUserStore } from '@/hooks/useUserStore';
+import { useArticleFormStore } from '@/hooks/useArticleFormStore';
+import { useFetchStore } from '@/hooks/useFetchStore';
+import { usePostStore } from '@/hooks/usePostStore';
+import { useArticleSkeleton } from '@/hooks/useArticleSkeleton';
 
 export default function SignupForm() {
     const router = useRouter()
@@ -27,10 +31,18 @@ export default function SignupForm() {
     const [passwordError, setPasswordError] = useState('');
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
+    const { clearArticleData } = useArticleFormStore()
+    const { resetFetchALL } = useFetchStore()
+    const { clearPosts } = usePostStore()
     const { setUser } = useUserStore()
+    const { resetShow } = useArticleSkeleton()
     const isFormValid = !passwordError && name && email && password && confirmPassword;
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        resetFetchALL()
+        clearArticleData()
+        clearPosts()
+        resetShow()
         setLoading(true)
         const formData = new FormData()
         formData.append('name', name)
@@ -73,7 +85,7 @@ export default function SignupForm() {
 
     }
     return (
-           <div className="flex items-center justify-center ">
+        <div className="flex items-center justify-center ">
             {loading && <div className="absolute inset-0 z-10 flex items-center justify-center  bg-opacity-60 rounded-xl">
                 <Spinner size="large" className="text-violet-600" />
             </div>}

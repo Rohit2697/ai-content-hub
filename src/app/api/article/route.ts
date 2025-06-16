@@ -1,7 +1,12 @@
 import { db } from "@/db";
 import { NextRequest, NextResponse } from "next/server";
 //import { CreateArticleRequest } from '@/app/articles/article-type';
-import { errorResponseObject, getUser_from_token, readTime } from "@/lib/utils";
+import {
+  errorResponseObject,
+  getUser_from_token,
+  mapDBArticles,
+  readTime,
+} from "@/lib/utils";
 import sharp from "sharp";
 import { resetMemory } from "@/lib/memory";
 
@@ -33,15 +38,8 @@ export async function GET(req: NextRequest, context: UserArtlcesParams) {
     });
     if (!userArticles.length)
       return errorResponseObject("No Articles found!", 404);
-    return NextResponse.json(
-      userArticles.map((article) => {
-        return {
-          ...article,
-          tags: article.tags ? JSON.parse(article.tags) : "",
-        };
-      })
-    );
-  } else {
+    return NextResponse.json(mapDBArticles(userArticles));
+  } else if (search) {
     const searchedArticles = await db.post.findMany({
       where: search
         ? {
@@ -57,14 +55,14 @@ export async function GET(req: NextRequest, context: UserArtlcesParams) {
       },
     });
 
-    return NextResponse.json(
-      searchedArticles.map((article) => {
-        return {
-          ...article,
-          tags: article.tags ? JSON.parse(article.tags) : "",
-        };
-      })
-    );
+    return NextResponse.json(mapDBArticles(searchedArticles));
+  } else {
+    const all_articles = await db.post.findMany({
+      orderBy: {
+        date: "desc",
+      },
+    });
+    return NextResponse.json(mapDBArticles(all_articles));
   }
 }
 

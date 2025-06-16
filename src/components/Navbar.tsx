@@ -9,6 +9,7 @@ import SearchBox from './SearchBox';
 import { useUserStore } from '@/hooks/useUserStore';
 import { useHeadingStore } from '@/hooks/useHeadingStore';
 import NavbarSkeleton from './skeleton/navbar-skeleton';
+import { useFetchStore } from '@/hooks/useFetchStore';
 
 export default function Navbar() {
   const { user, setUser, clearUser } = useUserStore();
@@ -17,7 +18,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const [fetchingUser, setFetchingUser] = useState(false);
-
+  const { resetFetchALL } = useFetchStore()
   const notAllowedPaths = ['/login', '/signup'];
   const shouldHideNavbar = notAllowedPaths.includes(pathname);
 
@@ -59,7 +60,10 @@ export default function Navbar() {
         <Link href="/">
           <h1
             className="text-2xl font-extrabold text-violet-700 hover:text-violet-900 transition-colors duration-200 cursor-pointer text-center sm:text-left"
-            onClick={clearHeading}
+            onClick={() => {
+              clearHeading()
+              resetFetchALL()
+            }}
           >
             AI-Powered Knowledge Hub
           </h1>

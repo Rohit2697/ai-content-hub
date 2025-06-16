@@ -18,6 +18,20 @@ export type PreviewArticleProps = {
   setPreview: Dispatch<SetStateAction<boolean>>;
 };
 
+export type DBArticle = {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  content: string;
+  tags: string | null;
+  author: string;
+  date: string;
+  readingTime: string;
+  coverImage: Uint8Array | null;
+  summery: string | null;
+  createdBy: string;
+};
 export type Article = {
   id: string; // UUID
   slug: string; // Usually same as id, used for routing

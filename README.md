@@ -1,9 +1,9 @@
-
 # 🧠 AI-Powered Knowledge Hub
 
 An AI-enhanced content publishing platform where users can create, preview, and publish articles — with features like AI-powered generation, summarization, and Q&A. Built with **Next.js App Router**, **Langchain**, and **OpenAI API**.
 
 ## 🚀 Live Demo
+
 🔗 [ai-content-hub.vercel.app](https://ai-content-hub-ruddy.vercel.app/)
 
 ## ✨ Features
@@ -20,12 +20,12 @@ An AI-enhanced content publishing platform where users can create, preview, and 
 
 ## 🧰 Tech Stack
 
-| Layer         | Tech                                     |
-|---------------|------------------------------------------|
-| Frontend      | Next.js (App Router), Tailwind CSS, Tiptap, TypeScript |
-| State         | Zustand                                  |
-| Backend/API   | Next.js API Routes, Prisma ORM, SQLite   |
-| AI Integration| Langchain + OpenAI API                   |
+| Layer          | Tech                                                   |
+| -------------- | ------------------------------------------------------ |
+| Frontend       | Next.js (App Router), Tailwind CSS, Tiptap, TypeScript |
+| State          | Zustand                                                |
+| Backend/API    | Next.js API Routes, Prisma ORM, SQLite                 |
+| AI Integration | Langchain + OpenAI API                                 |
 
 ## 📦 Setup Instructions
 
@@ -104,13 +104,14 @@ Currently the app uses a lightweight token-based auth system (with `token` cooki
 ## 🤝 Contributing
 
 Contributions are welcome! Feel free to:
+
 - Fork the repo
 - Create a new branch
 - Submit a pull request
-
 
 ## 🙋‍♂️ Author
 
 **Rohit Dey**  
 🔗 [LinkedIn](https://www.linkedin.com/in/rohit-dey-7564a0123/)  
 💻 [Portfolio](https://ai-content-hub-ruddy.vercel.app/)
+
